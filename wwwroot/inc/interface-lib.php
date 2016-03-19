@@ -777,12 +777,12 @@ function serializeTags ($chain, $baseurl = '')
 
 function startPortlet ($title = '')
 {
-	echo "<div class=portlet><h2>${title}</h2>";
+	echo "<div class=\"box box-solid\"><div class=\"box-header with-border\"><h3 class=\"box-title\">${title}</h3></div><div class=\"box-body\">";
 }
 
 function finishPortlet ()
 {
-	echo "</div>\n";
+	echo "</div></div>\n";
 }
 
 function getPageName ($page_code)
