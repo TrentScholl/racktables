@@ -701,12 +701,12 @@ function renderRackspace ()
 					echo "<td><ul class=\"mailbox-attachments clearfix\"";
                     foreach ($rackList as $rack)
                     {
-                        echo "<li><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+                        echo "<li><span class=\"mailbox-attachment-icon has-img\"><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
                         echo "<img border=0 width=${rackwidth} height=";
                         echo getRackImageHeight ($rack['height']);
                         echo " title='${rack['height']} units'";
-                        echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
-                        echo "<br>${rack['name']}</a></li>";
+                        echo "src='?module=image&img=minirack&rack_id=${rack['id']}'></a></span>";
+                        echo "<span class=\"mailbox-attachment-info\">${rack['name']}</span></li>";
                         $rackListIdx++;
                     }
 					$order = $nextorder[$order];
