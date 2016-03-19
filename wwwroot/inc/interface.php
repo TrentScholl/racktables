@@ -698,7 +698,7 @@ function renderRackspace ()
 					$locationTree = substr ($locationTree, 8);
 					echo $locationTree;
 					echo "</td><td><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></td>";
-					echo "<td><ul class=\"mailbox-attachments clearfix\"";
+					echo "<td><ul class=\"mailbox-attachments clearfix\">";
                     foreach ($rackList as $rack)
                     {
                         echo "<li><span class=\"mailbox-attachment-icon has-img\"><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
