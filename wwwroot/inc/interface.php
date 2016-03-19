@@ -706,7 +706,7 @@ function renderRackspace ()
                         echo getRackImageHeight ($rack['height']);
                         echo " title='${rack['height']} units'";
                         echo "src='?module=image&img=minirack&rack_id=${rack['id']}'></a></span>";
-                        echo "<span class=\"mailbox-attachment-info\">${rack['name']}</span></li>";
+                        echo "<span class=\"mailbox-attachment-info text-center\"><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>${rack['name']}</a></span></li>";
                         $rackListIdx++;
                     }
 					$order = $nextorder[$order];
