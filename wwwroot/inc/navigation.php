@@ -60,7 +60,7 @@ $page['index']['handler'] = 'renderIndex';
 
 $page['rackspace']['title'] = 'Rackspace';
 $page['rackspace']['parent'] = 'index';
-$page['rackspace']['icon'] = 'fa-dashboard';
+$page['rackspace']['icon'] = 'fa-tasks';
 $tab['rackspace']['default'] = 'Browse';
 $tab['rackspace']['editlocations'] = 'Manage locations';
 $tab['rackspace']['editrows'] = 'Manage rows';
@@ -78,6 +78,7 @@ $ophandler['rackspace']['editrows']['deleteRow'] = 'deleteRow';
 
 $page['depot']['parent'] = 'index';
 $page['depot']['title'] = 'Objects';
+$page['depot']['icon'] = 'fa-book';
 $tab['depot']['default'] = 'Browse';
 $tab['depot']['addmore'] = 'Add more';
 $tabhandler['depot']['default'] = 'renderDepot';
@@ -299,6 +300,7 @@ $interface_requires['object-8021qports'] = 'interface-8021q.php';
 $interface_requires['object-8021qsync'] = 'interface-8021q.php';
 
 $page['ipv4space']['parent'] = 'index';
+$page['ipv4space']['icon'] = 'fa-th';
 $tab['ipv4space']['default'] = 'Browse';
 $tab['ipv4space']['newrange'] = 'Add';
 $tab['ipv4space']['manage'] = 'Delete';
@@ -309,6 +311,7 @@ $ophandler['ipv4space']['newrange']['add'] = 'addIPv4Prefix';
 $ophandler['ipv4space']['manage']['del'] = 'delIPv4Prefix';
 
 $page['ipv6space']['parent'] = 'index';
+$page['ipv6space']['icon'] = 'fa-pie-chart';
 $tab['ipv6space']['default'] = 'Browse';
 $tab['ipv6space']['newrange'] = 'Add';
 $tab['ipv6space']['manage'] = 'Delete';
@@ -391,6 +394,7 @@ $ophandler['ipaddress']['assignment']['add'] = 'addIPAllocation';
 
 $page['ipv4slb']['title'] = 'IP SLB';
 $page['ipv4slb']['parent'] = 'index';
+$page['ipv4slb']['icon'] = 'fa-code-fork';
 $tab['ipv4slb']['default'] = 'Virtual services';
 $tab['ipv4slb']['vs'] = 'VS groups';
 $tab['ipv4slb']['lbs'] = 'Load balancers';
@@ -517,6 +521,7 @@ $page['search']['bypass'] = 'q';
 $page['config']['title'] = 'Configuration';
 $page['config']['handler'] = 'renderConfigMainpage';
 $page['config']['parent'] = 'index';
+$page['config']['icon'] = 'fa-cog';
 $interface_requires['config-*'] = 'interface-config.php';
 
 $page['userlist']['title'] = 'Local users';
@@ -731,6 +736,7 @@ $interface_requires['cableconf-*'] = 'interface-cables.php';
 
 $page['reports']['title'] = 'Reports';
 $page['reports']['parent'] = 'index';
+$page['reports']['icon'] = 'fa-line-chart';
 $tab['reports']['default'] = 'System';
 $tab['reports']['rackcode'] = 'RackCode';
 $tab['reports']['ipv4'] = 'IPv4';
@@ -754,6 +760,7 @@ $interface_requires['reports-rackcode'] = 'code.php';
 $interface_requires['reports-*'] = 'interface-reports.php';
 
 $page['files']['title'] = 'Files';
+$page['files']['icon'] = 'fa-folder';
 $page['files']['parent'] = 'index';
 $tab['files']['default'] = 'Browse';
 $tab['files']['manage'] = 'Manage';
@@ -787,6 +794,7 @@ $ophandler['file']['replaceData']['replaceFile'] = 'replaceFile';
 
 $page['8021q']['title'] = '802.1Q';
 $page['8021q']['parent'] = 'index';
+$page['8021q']['icon'] = 'fa-road';
 $tab['8021q']['default'] = 'Status';
 $tab['8021q']['vdlist'] = 'Manage domains';
 $tab['8021q']['vstlist'] = 'Manage templates';
@@ -874,16 +882,19 @@ $interface_requires['dqueue-*'] = 'interface-8021q.php';
 
 $page['objectlog']['title'] = 'Log records';
 $page['objectlog']['parent'] = 'index';
+$page['objectlog']['icon'] = 'fa-archive';
 $tab['objectlog']['default'] = 'View';
 $tabhandler['objectlog']['default'] = 'allObjectLogs';
 
 $page['virtual']['title'] = 'Virtual Resources';
 $page['virtual']['parent'] = 'index';
+$page['virtual']['icon'] = 'fa-cube';
 $tab['virtual']['default'] = 'Summary';
 $tabhandler['virtual']['default'] = 'renderVirtualResourcesSummary';
 
 $page['cables']['title'] = 'Patch cables';
 $page['cables']['parent'] = 'index';
+$page['cables']['icon'] = 'fa-cart-arrow-down';
 $tab['cables']['default'] = 'View';
 $tab['cables']['amount'] = 'Consume/replenish';
 $tab['cables']['heaps'] = 'Configure heaps';
