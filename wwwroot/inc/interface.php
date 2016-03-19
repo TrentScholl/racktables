@@ -5393,6 +5393,110 @@ function renderTextEditor ($file_id)
 	echo "</td></tr>\n</table></form>\n";
 }
 
+function showPath ($pageno, $tabno)
+{
+	// This function returns array of page numbers leading to the target page
+	// plus page number of target page itself. The first element is the target
+	// page number and the last element is the index page number.
+	function getPath ($targetno)
+	{
+		$self = __FUNCTION__;
+		global $page;
+		$path = array();
+		$page_name = preg_replace ('/:.*/', '', $targetno);
+		// Recursion breaks at first parentless page.
+		if ($page_name == 'ipaddress')
+		{
+			// case ipaddress is a universal v4/v6 page, it has two parents and requires special handling
+			$ip_bin = ip_parse ($_REQUEST['ip']);
+			$parent = (strlen ($ip_bin) == 16 ? 'ipv6net' : 'ipv4net');
+			$path = $self ($parent);
+			$path[] = $targetno;
+		}
+		elseif (!isset ($page[$page_name]['parent']))
+			$path = array ($targetno);
+		else
+		{
+			$path = $self ($page[$page_name]['parent']);
+			$path[] = $targetno;
+		}
+		return $path;
+	}
+	global $page, $tab;
+	// Path.
+	$path = getPath ($pageno);
+	$items = array();
+	foreach (array_reverse ($path) as $no)
+	{
+		if (preg_match ('/(.*):(.*)/', $no, $m) && isset ($tab[$m[1]][$m[2]]))
+			$title = array
+			(
+				'name' => $tab[$m[1]][$m[2]],
+				'params' => array('page' => $m[1], 'tab' => $m[2]),
+			);
+		elseif (isset ($page[$no]['title']))
+			$title = array
+			(
+				'name' => $page[$no]['title'],
+				'params' => array()
+			);
+		else
+			$title = callHook ('dynamic_title_decoder', $no);
+		$item = "<li><a href='index.php?";
+		if (! isset ($title['params']['page']))
+			$title['params']['page'] = $no;
+		if (! isset ($title['params']['tab']))
+			$title['params']['tab'] = 'default';
+		$is_first = TRUE;
+		$anchor_tail = '';
+		foreach ($title['params'] as $param_name => $param_value)
+		{
+			if ($param_name == '#')
+			{
+				$anchor_tail = '#' . $param_value;
+				continue;
+			}
+			$item .= ($is_first ? '' : '&') . "${param_name}=${param_value}";
+			$is_first = FALSE;
+		}
+		$item .= $anchor_tail;
+		$item .= "'>" . $title['name'] . "</a></li>";
+		$items[] = $item;
+
+		// insert location bread crumbs
+		switch ($no)
+		{
+		case 'object':
+			$object = spotEntity ('object', $title['params']['object_id']);
+			if ($object['rack_id'])
+			{
+				$rack = spotEntity ('rack', $object['rack_id']);
+				$items[] = mkA ($rack['name'], 'rack', $rack['id']);
+				$items[] = mkA ($rack['row_name'], 'row', $rack['row_id']);
+				if ($rack['location_id'])
+				{
+					$trail = getLocationTrail ($rack['location_id']);
+					if (! empty ($trail))
+						$items[] = $trail;
+				}
+			}
+			break;
+		case 'row':
+			$trail = getLocationTrail ($title['params']['location_id']);
+			if (! empty ($trail))
+				$items[] = $trail;
+			break;
+		case 'location':
+			// overwrite the bread crumb for current location with whole path
+			$items[count ($items)-1] = getLocationTrail ($title['params']['location_id']);
+			break;
+		}
+	}
+
+	// Path (breadcrumbs)
+	echo implode(' : ', array_reverse ($items));
+}
+
 function showPathAndSearch ($pageno, $tabno)
 {
 	// This function returns array of page numbers leading to the target page
@@ -5519,7 +5623,7 @@ function showTabs ($pageno, $tabno)
 	global $tab, $page, $trigger;
 	if (!isset ($tab[$pageno]['default']))
 		return;
-	echo "<div class=greynavbar><ul id=foldertab style='margin-bottom: 0px; padding-top: 10px;'>";
+	echo "<div class=\"row\"><div class=\"col-md-12\"><div class=\"nav-tabs-custom\"><ul class=\"nav nav-tabs\">";
 	foreach ($tab[$pageno] as $tabidx => $tabtitle)
 	{
 		// Hide forbidden tabs.
@@ -5528,15 +5632,15 @@ function showTabs ($pageno, $tabno)
 		// Dynamic tabs should only be shown in certain cases (trigger exists and returns true).
 		if (!isset ($trigger[$pageno][$tabidx]))
 			$tabclass = 'std';
-		elseif ('' == $tabclass = call_user_func ($trigger[$pageno][$tabidx]))
+		elseif (!strlen ($tabclass = call_user_func ($trigger[$pageno][$tabidx])))
 			continue;
 		if ($tabidx == $tabno)
-			$tabclass = 'current'; // override any class for an active selection
-		echo "<li><a class=${tabclass}";
+			$tabclass = 'active'; // override any class for an active selection
+		echo "<li class=${tabclass}><a ";
 		echo " href='" . makeHref (makePageParams (array ('tab' => $tabidx)));
 		echo "'>${tabtitle}</a></li>\n";
 	}
-	echo "</ul></div>";
+	echo "</ul></div></div></div>";
 }
 
 function dynamic_title_decoder ($path_position)
