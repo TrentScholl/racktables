@@ -777,7 +777,7 @@ function serializeTags ($chain, $baseurl = '')
 
 function startPortlet ($title = '')
 {
-	echo "<div class=\"box box-solid\"><div class=\"box-header with-border\"><h3 class=\"box-title\">${title}</h3></div><div class=\"box-body\">";
+	echo "<div class=\"box box-default\"><div class=\"box-header with-border\"><h3 class=\"box-title\">${title}</h3></div><div class=\"box-body\">";
 }
 
 function finishPortlet ()
