@@ -797,7 +797,7 @@ function getPageName ($page_code)
 function getPageIcon ($page_code)
 {
 	global $page;
-	$icon = isset ($page[$page_code]['icon']) ? $page[$page_code]['icon'] : " fa-question");
+	$icon = isset ($page[$page_code]['icon']) ? $page[$page_code]['icon'] : "fa-question";
 	if (is_array ($icon))
 		$icon = $icon['icon'];
 	return $icon;
