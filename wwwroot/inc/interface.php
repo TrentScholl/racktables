@@ -614,7 +614,11 @@ function renderRackspace ()
 		$_SESSION['locationFilter'] = $_REQUEST['location_id'];
 	session_commit();
 
-	echo "<table class=objview border=0 width='100%'><tr><td class=pcleft>";
+?>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+
+<?php
 
 	$found_racks = array();
 	$cellfilter = getCellFilter();
@@ -626,33 +630,9 @@ function renderRackspace ()
 		{
 			$rackList = applyCellFilter ('rack', $cellfilter, $row_id);
 			$found_racks = array_merge ($found_racks, $rackList);
-			$location_id = $rowInfo['location_id'];
-			$locationIdx = 0;
-			// contains location names in the form of 'grandparent parent child', used for sorting 
-			$locationTree = '';
-			// contains location names as well as links
-			$hrefLocationTree = '';
-			while ($location_id)
-			{
-				if ($locationIdx == 20)
-				{
-					showWarning ("Warning: There is likely a circular reference in the location tree.  Investigate location ${location_id}.");
-					break;
-				}
-				$parentLocation = spotEntity ('location', $location_id);
-				$locationTree = sprintf ('%s %s', $parentLocation['name'], $locationTree);
-				$hrefLocationTree = "&raquo; <a href='" .
-					makeHref(array('page'=>'location', 'location_id'=>$parentLocation['id'])) .
-					"${cellfilter['urlextra']}'>${parentLocation['name']}</a> " .
-					$hrefLocationTree;
-				$location_id = $parentLocation['parent_id'];
-				$locationIdx++;
-			}
-			$hrefLocationTree = substr ($hrefLocationTree, 8);
 			$rows[] = array (
 				'location_id' => $rowInfo['location_id'],
-				'location_tree' => $locationTree,
-				'href_location_tree' => $hrefLocationTree,
+				'location_name' => $rowInfo['location_name'],
 				'row_id' => $row_id,
 				'row_name' => $rowInfo['name'],
 				'racks' => $rackList
@@ -660,13 +640,11 @@ function renderRackspace ()
 			$rackCount += count($rackList);
 		}
 
-		// sort by location, then by row
-		usort ($rows, 'rackspaceCmp');
-
 		if (! renderEmptyResults($cellfilter, 'racks', $rackCount))
 		{
 			// generate thumb gallery
 			global $nextorder;
+			$rackwidth = getRackImageWidth();
 			// Zero value effectively disables the limit.
 			$maxPerRow = getConfigVar ('RACKS_PER_ROW');
 			$order = 'odd';
@@ -674,10 +652,23 @@ function renderRackspace ()
 				echo "<h2>No rows found</h2>\n";
 			else
 			{
-				echo '<table border=0 cellpadding=10 class=cooltable>';
-				echo '<tr><th class=tdleft>Location</th><th class=tdleft>Row</th><th class=tdleft>Racks</th></tr>';
+?>
+          <div class="row">
+            <div class="col-md-9">
+
+                <div class="box">
+                    <table class="table table-striped">
+                        <tr>
+                        <th>Location</th>
+                        <th>Row</th>
+                        <th>Racks</th>
+                        </tr>
+<?php
 				foreach ($rows as $row)
 				{
+					$location_id = $row['location_id'];
+					$row_id = $row['row_id'];
+					$row_name = $row['row_name'];
 					$rackList = $row['racks'];
 
 					if (
@@ -686,9 +677,28 @@ function renderRackspace ()
 					)
 						continue;
 					$rackListIdx = 0;
-					echo "<tr class=row_${order}><th class=tdleft>${row['href_location_tree']}</th>";
-					echo "<th class=tdleft><a href='".makeHref(array('page'=>'row', 'row_id'=>$row['row_id']))."${cellfilter['urlextra']}'>${row['row_name']}</a></th>";
-					echo "<th class=tdleft><table border=0 cellspacing=5><tr>";
+					echo "<tr><td>";
+					$locationIdx = 0;
+					$locationTree = '';
+					while ($location_id)
+					{
+						if ($locationIdx == 20)
+						{
+							showWarning ("Warning: There is likely a circular reference in the location tree.  Investigate location ${location_id}.");
+							break;
+						}
+						$parentLocation = spotEntity ('location', $location_id);
+						$locationTree = "&raquo; <a href='" .
+							makeHref(array('page'=>'location', 'location_id'=>$parentLocation['id'])) .
+							"${cellfilter['urlextra']}'>${parentLocation['name']}</a> " .
+							$locationTree;
+						$location_id = $parentLocation['parent_id'];
+						$locationIdx++;
+					}
+					$locationTree = substr ($locationTree, 8);
+					echo $locationTree;
+					echo "</td><td><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></td>";
+					echo "<td><table border=0 cellspacing=5><tr>";
 					if (! count ($rackList))
 						echo '<td>(empty row)</td>';
 					else
@@ -696,26 +706,45 @@ function renderRackspace ()
 						{
 							if ($rackListIdx > 0 and $maxPerRow > 0 and $rackListIdx % $maxPerRow == 0)
 							{
-								echo '</tr></table></th></tr>';
-								echo "<tr class=row_${order}><th class=tdleft></th><th class=tdleft>${row['row_name']} (continued)";
-								echo "</th><th class=tdleft><table border=0 cellspacing=5><tr>";
+								echo '</tr></table></td></tr>';
+								echo "<tr><td></td><td>${row_name} (continued)";
+								echo "</td><td><table><tr>";
 							}
-							echo '<td align=center valign=bottom>' . getRackThumbLink ($rack);
-							echo '<br>' . mkA (stringForLabel ($rack['name']), 'rack', $rack['id']) . '</td>';
+							echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+							echo "<img border=0 width=${rackwidth} height=";
+							echo getRackImageHeight ($rack['height']);
+							echo " title='${rack['height']} units'";
+							echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
+							echo "<br>${rack['name']}</a></td>";
 							$rackListIdx++;
 						}
 					$order = $nextorder[$order];
-					echo "</tr></table></th></tr>\n";
+					echo "</tr></table></td></tr>\n";
 				}
 				echo "</table>\n";
 			}
 		}
 	}
-	echo '</td><td class=pcright width="25%">';
-	renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
-	echo "<br>\n";
-	renderLocationFilterPortlet ();
-	echo "</td></tr></table>\n";
+	//echo '</td><td class=pcright width="25%">';
+	//renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
+	//echo "<br>\n";
+	//renderLocationFilterPortlet ();
+	//echo "</td></tr></table>\n";
+    ?>
+    </div>
+    </div>
+        <div class="col-md-3">
+       <?php 
+       renderCellFilterPortlet ($cellfilter, 'rack', $found_racks); 
+       renderLocationFilterPortlet ();
+       ?> 
+    </div>
+    </div>
+
+    
+
+
+    <?php
 }
 
 function renderLocationRowForEditor ($subtree, $level = 0)
