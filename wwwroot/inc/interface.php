@@ -4287,22 +4287,22 @@ function renderRackPage ($rack_id)
 {
 	$rackData = spotEntity ('rack', $rack_id);
 	amplifyCell ($rackData);
-	echo "<table border=0 class=objectview cellspacing=0 cellpadding=0><tr>";
+	echo "<div class=\"row\">";
 
 	// Left column with information.
-	echo "<td class=pcleft>";
+	echo "<div class=\"col-md-4\">";
 	renderRackInfoPortlet ($rackData);
 	renderFilesPortlet ('rack', $rack_id);
-	echo '</td>';
+	echo '</div>';
 
 	// Right column with rendered rack.
-	echo '<td class=pcright>';
+	echo "<div class=\"col-md-8\">";
 	startPortlet ('Rack diagram');
 	renderRack ($rack_id);
 	finishPortlet();
-	echo '</td>';
+	echo '</div>';
 
-	echo '</tr></table>';
+	echo '</div>';
 }
 
 function dragon ()
