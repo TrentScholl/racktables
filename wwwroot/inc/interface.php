@@ -698,28 +698,19 @@ function renderRackspace ()
 					$locationTree = substr ($locationTree, 8);
 					echo $locationTree;
 					echo "</td><td><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></td>";
-					echo "<td><table class=\"text-center\" width=\"100%\"><tr>";
-					if (! count ($rackList))
-						echo '<td>(empty row)</td>';
-					else
-						foreach ($rackList as $rack)
-						{
-							if ($rackListIdx > 0 and $maxPerRow > 0 and $rackListIdx % $maxPerRow == 0)
-							{
-								echo '</tr></table></td></tr>';
-								echo "<tr><td></td><td>${row_name} (continued)";
-								echo "</td><td><table><tr>";
-							}
-							echo "<td valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
-							echo "<img border=0 width=${rackwidth} height=";
-							echo getRackImageHeight ($rack['height']);
-							echo " title='${rack['height']} units'";
-							echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
-							echo "<br>${rack['name']}</a></td>";
-							$rackListIdx++;
-						}
+					echo "<td><ul class=\"mailbox-attachments clearfix\"";
+                    foreach ($rackList as $rack)
+                    {
+                        echo "<li><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+                        echo "<img border=0 width=${rackwidth} height=";
+                        echo getRackImageHeight ($rack['height']);
+                        echo " title='${rack['height']} units'";
+                        echo "src='?module=image&img=minirack&rack_id=${rack['id']}'>";
+                        echo "<br>${rack['name']}</a></li>";
+                        $rackListIdx++;
+                    }
 					$order = $nextorder[$order];
-					echo "</tr></table></td></tr>\n";
+					echo "</ul></td></tr>\n";
 				}
 				echo "</table>\n";
 			}
