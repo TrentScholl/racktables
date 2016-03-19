@@ -295,7 +295,7 @@ function renderNavigation ()
   {
     foreach ($row as $column)
     {
-      echo (! permitted ($column)) ? "" : "<li><a href=\"" . makeHref (array ('page' => $column)) . "\"><i class=\"fa fa-line-chart\"></i> <span>" . getPageName ($column) . "</span></a></li>";
+      echo (! permitted ($column)) ? "" : "<li><a href=\"" . makeHref (array ('page' => $column)) . "\"><i class=\"fa " . getPageIcon ($column) . "\"></i> <span>" . getPageName ($column) . "</span></a></li>";
     }
   }
 }

@@ -60,6 +60,7 @@ $page['index']['handler'] = 'renderIndex';
 
 $page['rackspace']['title'] = 'Rackspace';
 $page['rackspace']['parent'] = 'index';
+$page['rackspace']['icon'] = 'fa-dashboard';
 $tab['rackspace']['default'] = 'Browse';
 $tab['rackspace']['editlocations'] = 'Manage locations';
 $tab['rackspace']['editrows'] = 'Manage rows';

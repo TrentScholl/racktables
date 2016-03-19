@@ -794,6 +794,15 @@ function getPageName ($page_code)
 	return $title;
 }
 
+function getPageIcon ($page_code)
+{
+	global $page;
+	$icon = $page[$page_code]['icon']
+	if (is_array ($icon))
+		$icon = $icon['icon'];
+	return $icon;
+}
+
 function printTagTRs ($cell, $baseurl = '')
 {
 	if (getConfigVar ('SHOW_EXPLICIT_TAGS') == 'yes' and count ($cell['etags']))
