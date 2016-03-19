@@ -698,7 +698,7 @@ function renderRackspace ()
 					$locationTree = substr ($locationTree, 8);
 					echo $locationTree;
 					echo "</td><td><a href='".makeHref(array('page'=>'row', 'row_id'=>$row_id))."${cellfilter['urlextra']}'>${row_name}</a></td>";
-					echo "<td><table border=0 cellspacing=5><tr>";
+					echo "<td><table class=\"text-center\" width=\"100%\"><tr>";
 					if (! count ($rackList))
 						echo '<td>(empty row)</td>';
 					else
@@ -710,7 +710,7 @@ function renderRackspace ()
 								echo "<tr><td></td><td>${row_name} (continued)";
 								echo "</td><td><table><tr>";
 							}
-							echo "<td align=center valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
+							echo "<td valign=bottom><a href='".makeHref(array('page'=>'rack', 'rack_id'=>$rack['id']))."'>";
 							echo "<img border=0 width=${rackwidth} height=";
 							echo getRackImageHeight ($rack['height']);
 							echo " title='${rack['height']} units'";
@@ -725,11 +725,6 @@ function renderRackspace ()
 			}
 		}
 	}
-	//echo '</td><td class=pcright width="25%">';
-	//renderCellFilterPortlet ($cellfilter, 'rack', $found_racks);
-	//echo "<br>\n";
-	//renderLocationFilterPortlet ();
-	//echo "</td></tr></table>\n";
     ?>
     </div>
     </div>
